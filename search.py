@@ -86,7 +86,41 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
+    # "*** YOUR CODE HERE ***"
+    fringe = util.Stack()
+    stateList = util.Stack()
+    closed = []
+    fringe.push(problem.getStartState())
+    while True:
+        print(fringe.list)
+        print(closed)
+        print(stateList.list)
+
+        cs = fringe.pop()
+        stateList.push(cs)
+        closed.append(cs)
+        
+        if problem.isGoalState(cs):
+            print("yeah!")
+            # return stateList
+            break
+        else:
+            successors = problem.getSuccessors(cs)
+            hasChild = True
+            for successor in successors:
+                hasChild = False
+                if successor[0] not in closed:
+                    hasChild = True
+                    fringe.push(successor[0])
+                print(hasChild)
+            if not hasChild:
+                print("poping")
+                stateList.pop()
+        print("\n")
+    print(fringe.list)
+    print(closed)
+    print(stateList.list)
+    # return  ['West', 'East','South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
