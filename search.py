@@ -121,12 +121,8 @@ def breadthFirstSearch(problem):
     fringe = util.Queue()
     closed = []
     answer = []
-<<<<<<< HEAD
     cs = (problem.getStartState(), 'START', 1)
     fringe.push(cs)
-=======
-    fringe.push((problem.getStartState(), 'START', 1))
->>>>>>> 4bfb7465ad6bc16a40861de8bae1d8dd90315d50
     while True:
         # print(fringe.list)
         # print(closed)
@@ -155,12 +151,8 @@ def uniformCostSearch(problem):
     closed = []
     answer = []
     depth = 0
-<<<<<<< HEAD
     cs = (problem.getStartState(), 'START', 1)
     fringe.push(cs, depth)
-=======
-    fringe.push((problem.getStartState(), 'START', 1), depth)
->>>>>>> 4bfb7465ad6bc16a40861de8bae1d8dd90315d50
     while True:
         # print(fringe.heap)
         # print(closed)
