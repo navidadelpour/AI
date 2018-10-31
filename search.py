@@ -88,40 +88,31 @@ def depthFirstSearch(problem):
     """
     # "*** YOUR CODE HERE ***"
     fringe = util.Stack()
-    stateList = util.Stack()
     closed = []
-    fringe.push(problem.getStartState())
+    answer = []
+    fringe.push((problem.getStartState(), 'START', 1))
     while True:
-        print(fringe.list)
-        print(closed)
-        print(stateList.list)
+        # print(fringe.list)
+        # print(closed)
 
         cs = fringe.pop()
-        stateList.push(cs)
-        closed.append(cs)
-        
-        if problem.isGoalState(cs):
-            print("yeah!")
-            # return stateList
-            break
+        closed.append(cs[0])
+        if problem.isGoalState(cs[0]):
+            for i in range(1, len(cs), 3):
+                answer.append(cs[i])
+
+            answer.remove("START")
+            answer.reverse()
+            return answer
         else:
-            successors = problem.getSuccessors(cs)
-            hasChild = True
+            successors = problem.getSuccessors(cs[0])
             for successor in successors:
-                hasChild = False
                 if successor[0] not in closed:
-                    hasChild = True
-                    fringe.push(successor[0])
-                print(hasChild)
-            if not hasChild:
-                print("poping")
-                stateList.pop()
-        print("\n")
-    print(fringe.list)
-    print(closed)
-    print(stateList.list)
+                    successor += cs
+                    fringe.push(successor)
+    
     # return  ['West', 'East','South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
