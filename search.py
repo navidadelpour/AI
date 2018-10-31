@@ -112,11 +112,34 @@ def depthFirstSearch(problem):
                     fringe.push(successor)
     
     # return  ['West', 'East','South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
-    #util.raiseNotDefined()
+    util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    fringe = util.Queue()
+    closed = []
+    answer = []
+    fringe.push((problem.getStartState(), 'START', 1))
+    while True:
+        # print(fringe.list)
+        # print(closed)
+
+        cs = fringe.pop()
+        closed.append(cs[0])
+        if problem.isGoalState(cs[0]):
+            for i in range(1, len(cs), 3):
+                answer.append(cs[i])
+
+            answer.remove("START")
+            answer.reverse()
+            return answer
+        else:
+            successors = problem.getSuccessors(cs[0])
+            for successor in successors:
+                if successor[0] not in closed:
+                    successor += cs
+                    fringe.push(successor)
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
