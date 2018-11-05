@@ -90,14 +90,14 @@ def depthFirstSearch(problem):
     fringe = util.Stack()
     closed = []
     answer = []
-    cs = (problem.getStartState(), 'START', 1)
+    cs = (problem.getStartState(), 'START', 0)
     fringe.push(cs)
     while True:
         # print(fringe.list)
         # print(closed)
+        # print('\n\n')
 
         cs = fringe.pop()
-        closed.append(cs[0])
         if problem.isGoalState(cs[0]):
             for i in range(1, len(cs), 3):
                 answer.append(cs[i])
@@ -105,7 +105,8 @@ def depthFirstSearch(problem):
             answer.remove("START")
             answer.reverse()
             return answer
-        else:
+        if cs[0] not in closed:
+            closed.append(cs[0])
             successors = problem.getSuccessors(cs[0])
             for successor in successors:
                 if successor[0] not in closed:
@@ -121,14 +122,13 @@ def breadthFirstSearch(problem):
     fringe = util.Queue()
     closed = []
     answer = []
-    cs = (problem.getStartState(), 'START', 1)
+    cs = (problem.getStartState(), 'START', 0)
     fringe.push(cs)
     while True:
         # print(fringe.list)
         # print(closed)
 
         cs = fringe.pop()
-        closed.append(cs[0])
         if problem.isGoalState(cs[0]):
             for i in range(1, len(cs), 3):
                 answer.append(cs[i])
@@ -136,7 +136,8 @@ def breadthFirstSearch(problem):
             answer.remove("START")
             answer.reverse()
             return answer
-        else:
+        if cs[0] not in closed:
+            closed.append(cs[0])
             successors = problem.getSuccessors(cs[0])
             for successor in successors:
                 if successor[0] not in closed:
@@ -150,15 +151,13 @@ def uniformCostSearch(problem):
     fringe = util.PriorityQueue()
     closed = []
     answer = []
-    depth = 0
-    cs = (problem.getStartState(), 'START', 1)
-    fringe.push(cs, depth)
+    cs = (problem.getStartState(), 'START', 0)
+    fringe.push(cs, cs[2])
     while True:
         # print(fringe.heap)
         # print(closed)
 
         cs = fringe.pop()
-        closed.append(cs[0])
         if problem.isGoalState(cs[0]):
             for i in range(1, len(cs), 3):
                 answer.append(cs[i])
@@ -166,13 +165,18 @@ def uniformCostSearch(problem):
             answer.remove("START")
             answer.reverse()
             return answer
-        else:
+        if cs[0] not in closed:
+            closed.append(cs[0])
             successors = problem.getSuccessors(cs[0])
             for successor in successors:
                 if successor[0] not in closed:
                     successor += cs
-                    fringe.push(successor, depth)
-        depth += 1
+                    g = []
+                    for i in range(1, len(successor), 3):
+                        g.append(successor[i])
+                    g.remove("START")
+                    g.reverse()
+                    fringe.push(successor, problem.getCostOfActions(g))
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -188,15 +192,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     fringe = util.PriorityQueue()
     closed = []
     answer = []
-    depth = 0
-    cs = (problem.getStartState(), 'START', 1)
-    fringe.push(cs, depth + heuristic(cs[0], problem))
+    cs = (problem.getStartState(), 'START', 0)
+    fringe.push(cs, cs[2] + heuristic(cs[0], problem))
     while True:
         # print(fringe.heap)
         # print(closed)
 
         cs = fringe.pop()
-        closed.append(cs[0])
         if problem.isGoalState(cs[0]):
             for i in range(1, len(cs), 3):
                 answer.append(cs[i])
@@ -204,14 +206,18 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             answer.remove("START")
             answer.reverse()
             return answer
-        else:
+        if cs[0] not in closed:
+            closed.append(cs[0])
             successors = problem.getSuccessors(cs[0])
             for successor in successors:
                 if successor[0] not in closed:
                     successor += cs
-                    fringe.push(successor, depth + heuristic(cs[0], problem))
-        depth += 1
-
+                    g = []
+                    for i in range(1, len(successor), 3):
+                        g.append(successor[i])
+                    g.remove("START")
+                    g.reverse()
+                    fringe.push(successor, problem.getCostOfActions(g) + heuristic(successor[0], problem))
     util.raiseNotDefined()
 
 
