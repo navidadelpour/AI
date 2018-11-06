@@ -72,6 +72,33 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def generalGraphSearch(problem, structure, heuristic=None):
+    fringe = structure()
+    closed = []
+    path = []
+    cs = problem.getStartState()
+    if structure.__name__ == 'PriorityQueue':
+        fringe.push((cs, []), 0)
+    else:
+        fringe.push((cs, []))
+    while True:
+        cs, path = fringe.pop()
+        if problem.isGoalState(cs):
+            return path
+        if cs not in closed:
+            closed.append(cs)
+            successors = problem.getSuccessors(cs)
+            for successor in successors:
+                newPath = path[:]
+                newPath.append(successor[1])
+                if structure.__name__ == 'PriorityQueue':
+                    if(heuristic != None):
+                        fringe.push((successor[0], newPath), problem.getCostOfActions(newPath) + heuristic(successor[0], problem))
+                    else:
+                        fringe.push((successor[0], newPath), problem.getCostOfActions(newPath))
+                else:
+                    fringe.push((successor[0], newPath))
+    
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,96 +114,19 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     # "*** YOUR CODE HERE ***"
-    fringe = util.Stack()
-    closed = []
-    answer = []
-    cs = (problem.getStartState(), 'START', 0)
-    fringe.push(cs)
-    while True:
-        # print(fringe.list)
-        # print(closed)
-        # print('\n\n')
-
-        cs = fringe.pop()
-        if problem.isGoalState(cs[0]):
-            for i in range(1, len(cs), 3):
-                answer.append(cs[i])
-
-            answer.remove("START")
-            answer.reverse()
-            return answer
-        if cs[0] not in closed:
-            closed.append(cs[0])
-            successors = problem.getSuccessors(cs[0])
-            for successor in successors:
-                if successor[0] not in closed:
-                    successor += cs
-                    fringe.push(successor)
-    
-    # return  ['West', 'East','South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
+    return generalGraphSearch(problem, util.Stack)
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    fringe = util.Queue()
-    closed = []
-    answer = []
-    cs = (problem.getStartState(), 'START', 0)
-    fringe.push(cs)
-    while True:
-        # print(fringe.list)
-        # print(closed)
-
-        cs = fringe.pop()
-        if problem.isGoalState(cs[0]):
-            for i in range(1, len(cs), 3):
-                answer.append(cs[i])
-
-            answer.remove("START")
-            answer.reverse()
-            return answer
-        if cs[0] not in closed:
-            closed.append(cs[0])
-            successors = problem.getSuccessors(cs[0])
-            for successor in successors:
-                if successor[0] not in closed:
-                    successor += cs
-                    fringe.push(successor)
+    return generalGraphSearch(problem, util.Queue)
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    fringe = util.PriorityQueue()
-    closed = []
-    answer = []
-    cs = (problem.getStartState(), 'START', 0)
-    fringe.push(cs, cs[2])
-    while True:
-        # print(fringe.heap)
-        # print(closed)
-
-        cs = fringe.pop()
-        if problem.isGoalState(cs[0]):
-            for i in range(1, len(cs), 3):
-                answer.append(cs[i])
-
-            answer.remove("START")
-            answer.reverse()
-            return answer
-        if cs[0] not in closed:
-            closed.append(cs[0])
-            successors = problem.getSuccessors(cs[0])
-            for successor in successors:
-                if successor[0] not in closed:
-                    successor += cs
-                    g = []
-                    for i in range(1, len(successor), 3):
-                        g.append(successor[i])
-                    g.remove("START")
-                    g.reverse()
-                    fringe.push(successor, problem.getCostOfActions(g))
+    return generalGraphSearch(problem, util.PriorityQueue)
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -189,35 +139,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    fringe = util.PriorityQueue()
-    closed = []
-    answer = []
-    cs = (problem.getStartState(), 'START', 0)
-    fringe.push(cs, cs[2] + heuristic(cs[0], problem))
-    while True:
-        # print(fringe.heap)
-        # print(closed)
-
-        cs = fringe.pop()
-        if problem.isGoalState(cs[0]):
-            for i in range(1, len(cs), 3):
-                answer.append(cs[i])
-
-            answer.remove("START")
-            answer.reverse()
-            return answer
-        if cs[0] not in closed:
-            closed.append(cs[0])
-            successors = problem.getSuccessors(cs[0])
-            for successor in successors:
-                if successor[0] not in closed:
-                    successor += cs
-                    g = []
-                    for i in range(1, len(successor), 3):
-                        g.append(successor[i])
-                    g.remove("START")
-                    g.reverse()
-                    fringe.push(successor, problem.getCostOfActions(g) + heuristic(successor[0], problem))
+    return generalGraphSearch(problem, util.PriorityQueue, heuristic)
     util.raiseNotDefined()
 
 
