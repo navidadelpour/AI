@@ -1,16 +1,17 @@
 from Problem import EightPuzzleProblem;
 
-def hillClimbingNextMove(problem):
-    current = problem.getIndex(problem.board, 0)
-    currentH = problem.manhatanHeuristic()
+def hillClimbing(problem):
+    current = problem
+    while(True):
+        currentH = problem.manhatanHeuristic()
+        bestSuccessor = current.getBestSuccessor()
+        bestSuccessorH = bestSuccessor.manhatanHeuristic()
 
-    bestSuccessor = problem.getBestSuccessor()
-    bestSuccessorH = bestSuccessor.manhatanHeuristic()
-
-    if currentH >= bestSuccessorH:
-        return problem
-    else:
-        return bestSuccessor
+        if bestSuccessorH >= currentH or bestSuccessorH == 0:
+            return bestSuccessor
+        current = bestSuccessor
+        
     
+x = hillClimbing(EightPuzzleProblem())
 
-hillClimbingNextMove(EightPuzzleProblem())
+print(x.board)
