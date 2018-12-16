@@ -15,7 +15,9 @@ class EightPuzzleProblem:
 
     def __init__(self):
         self.setGoal()
-        self.getSuccessors()
+
+    def setBoard(self, board):
+        self.board = board
     
     def setGoal(self):
         value = 1
@@ -28,16 +30,20 @@ class EightPuzzleProblem:
                 value += 1
             self.goal.append(temp)  
 
-    def getSuccessors(self):
-        successors = []
+    # getting the best successor for a given problem
+    def getBestSuccessor(self):
+        bestSuccessor = []
         blockDirections = self.getBlockDirections(self.getIndex(self.board, 0))
         
         for direction in Directions:
-            successor = self.move(direction)
-            if successor != False:
-                successors.append(successor)
+            successor = EightPuzzleProblem()
+            successor.setBoard(self.move(direction))
+            if len(successor.board) > 0:
+                successor_h = successor.manhatanHeuristic()
+                if len(bestSuccessor) == 0 or bestSuccessor[1] < successor_h:
+                    bestSuccessor = (successor, successor_h)
         
-        return successors
+        print bestSuccessor[0]
         
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
@@ -45,7 +51,7 @@ class EightPuzzleProblem:
         blockDirections = self.getBlockDirections((x, y))
         # checking the what directions are blocked
         if direction in blockDirections:
-            return False
+            return []
 
         # calculate next position after doing directions
         x2, y2 = self.getTargetState((x, y), direction)
@@ -95,7 +101,7 @@ class EightPuzzleProblem:
     
     def manhatanHeuristic(self):
         return_value = 0
-        for k in (range(9) + 1):
+        for k in range(1, 9):
             x1, y1 = self.getIndex(self.board, k)
             x2, y2 = self.getIndex(self.goal, k)
 
@@ -103,3 +109,4 @@ class EightPuzzleProblem:
         return return_value
 
 porblem = EightPuzzleProblem()
+porblem.getBestSuccessor()
