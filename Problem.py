@@ -39,11 +39,11 @@ class EightPuzzleProblem:
             successor = EightPuzzleProblem()
             successor.setBoard(self.move(direction))
             if len(successor.board) > 0:
-                successor_h = successor.manhatanHeuristic()
-                if len(bestSuccessor) == 0 or bestSuccessor[1] < successor_h:
-                    bestSuccessor = (successor, successor_h)
+                successorH = successor.manhatanHeuristic()
+                if len(bestSuccessor) == 0 or bestSuccessor[1] < successorH:
+                    bestSuccessor = (successor, successorH)
         
-        print bestSuccessor[0]
+        return bestSuccessor[0]
         
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
@@ -57,12 +57,12 @@ class EightPuzzleProblem:
         x2, y2 = self.getTargetState((x, y), direction)
 
         # swap
-        return_board = copy.deepcopy(self.board)
-        target = return_board[x2][y2]
-        return_board[x2][y2] = 0
-        return_board[x][y] = target
+        nextBoard = copy.deepcopy(self.board)
+        target = nextBoard[x2][y2]
+        nextBoard[x2][y2] = 0
+        nextBoard[x][y] = target
 
-        return return_board
+        return nextBoard
 
     # calculating block directions of a given state
     def getBlockDirections(self, state):
@@ -100,13 +100,12 @@ class EightPuzzleProblem:
                     return (i, j)
     
     def manhatanHeuristic(self):
-        return_value = 0
+        h = 0
         for k in range(1, 9):
             x1, y1 = self.getIndex(self.board, k)
             x2, y2 = self.getIndex(self.goal, k)
 
-            return_value += x2 - x1 + y2 - y1
-        return return_value
+            h += x2 - x1 + y2 - y1
+        return h
 
-porblem = EightPuzzleProblem()
-porblem.getBestSuccessor()
+#porblem = EightPuzzleProblem()
