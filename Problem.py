@@ -29,7 +29,7 @@ class EightPuzzleProblem:
 
 
     def move(self, direction):
-        x, y = self.getIndex(0)
+        x, y = self.getIndex(self.board, 0)
 
         # checking the what directions are blocked
         blockDirections = []
@@ -63,10 +63,19 @@ class EightPuzzleProblem:
 
         return return_board
 
-    def getIndex(self, value):
+    def getIndex(self, board,value):
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
-                if self.board[i][j] == value:
+                if board[i][j] == value:
                     return (i, j)
     
+    def manhatanHeuristic(self):
+        return_value = 0
+        for k in (range(9) + 1):
+            x1, y1 = self.getIndex(self.board, k)
+            x2, y2 = self.getIndex(self.goal, k)
+
+            return_value += x2 - x1 + y2 - y1
+        return return_value
+        
 porblem = EightPuzzleProblem()
