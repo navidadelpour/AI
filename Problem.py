@@ -15,6 +15,7 @@ class EightPuzzleProblem:
 
     def __init__(self):
         self.setGoal()
+        self.getSuccessors()
     
     def setGoal(self):
         value = 1
@@ -27,11 +28,39 @@ class EightPuzzleProblem:
                 value += 1
             self.goal.append(temp)  
 
-
+    def getSuccessors(self):
+        successors = []
+        blockDirections = self.getBlockDirections(self.getIndex(self.board, 0))
+        
+        for direction in Directions:
+            successor = self.move(direction)
+            if successor != False:
+                successors.append(successor)
+        
+        return successors
+        
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
 
+        blockDirections = self.getBlockDirections((x, y))
         # checking the what directions are blocked
+        if direction in blockDirections:
+            return False
+
+        # calculate next position after doing directions
+        x2, y2 = self.getTargetState((x, y), direction)
+
+        # swap
+        return_board = copy.deepcopy(self.board)
+        target = return_board[x2][y2]
+        return_board[x2][y2] = 0
+        return_board[x][y] = target
+
+        return return_board
+
+    # calculating block directions of a given state
+    def getBlockDirections(self, state):
+        x, y = state
         blockDirections = []
         if x == 0:
             blockDirections.append(Directions.up)
@@ -42,10 +71,11 @@ class EightPuzzleProblem:
         elif y == 2:
             blockDirections.append(Directions.right)
         
-        if direction in blockDirections:
-            return False
-        
-        # calculate next position after doing directions
+        return blockDirections
+
+    # calculate target state after a given state move towards a given direction
+    def getTargetState(self, state, direction):
+        x, y = state
         if(direction == Directions.up):
             x2, y2 = x - 1, y
         elif(direction == Directions.down):
@@ -54,14 +84,8 @@ class EightPuzzleProblem:
             x2, y2 = x, y - 1
         elif(direction == Directions.right):
             x2, y2 = x, y + 1
-
-        # swap
-        return_board = copy.deepcopy(self.board)
-        target = return_board[x2][y2]
-        return_board[x2][y2] = 0
-        return_board[x][y] = target
-
-        return return_board
+        
+        return (x2, y2)
 
     def getIndex(self, board,value):
         for i in range(len(self.board)):
@@ -77,5 +101,5 @@ class EightPuzzleProblem:
 
             return_value += x2 - x1 + y2 - y1
         return return_value
-        
+
 porblem = EightPuzzleProblem()
