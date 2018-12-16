@@ -1,5 +1,5 @@
 import random;
-import copy;
+from copy import deepcopy;
 from enum import Enum;
 
 class Directions(Enum):
@@ -12,6 +12,9 @@ class EightPuzzleProblem:
 
     goal = []
     board = [[1, 2, 3], [4, 5, 6], [7, 0, 8]]
+    # 1 2 3
+    # 4 5 6
+    # 7 0 8
 
     def __init__(self):
         self.setGoal()
@@ -19,6 +22,7 @@ class EightPuzzleProblem:
     def setBoard(self, board):
         self.board = board
     
+    # setting the problem goal 
     def setGoal(self):
         value = 1
         for i in range(3):
@@ -35,14 +39,18 @@ class EightPuzzleProblem:
         bestSuccessor = []
         blockDirections = self.getBlockDirections(self.getIndex(self.board, 0))
         
+
         for direction in Directions:
-            successor = self.move(direction)
-            if len(successor.board) > 0:
-                successorH = successor.manhatanHeuristic()
-                if len(bestSuccessor) == 0 or bestSuccessor[1] < successorH:
-                    bestSuccessor = (successor, successorH)
+            successor = self.move(Directions.up)
+            # print(direction)
+            print(successor)
+            # if len(successor.board) > 0:
+            #     successorH = successor.manhatanHeuristic()
+            #     if len(bestSuccessor) == 0 or bestSuccessor[1] < successorH:
+            #         bestSuccessor = (successor, successorH)
         
-        return bestSuccessor[0]
+        # return bestSuccessor[0]
+        return self
         
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
@@ -56,7 +64,9 @@ class EightPuzzleProblem:
         x2, y2 = self.getTargetState((x, y), direction)
 
         # swap
-        next = copy.deepcopy(self)
+        next = EightPuzzleProblem()
+        next.setBoard(deepcopy(self.board))
+        
         target = next.board[x2][y2]
         next.board[x2][y2] = 0
         next.board[x][y] = target
@@ -75,7 +85,7 @@ class EightPuzzleProblem:
             blockDirections.append(Directions.left)
         elif y == 2:
             blockDirections.append(Directions.right)
-        
+
         return blockDirections
 
     # calculate target state after a given state move towards a given direction
@@ -106,3 +116,6 @@ class EightPuzzleProblem:
 
             h += x2 - x1 + y2 - y1
         return h
+
+p = EightPuzzleProblem()
+p.move(Directions.up)
