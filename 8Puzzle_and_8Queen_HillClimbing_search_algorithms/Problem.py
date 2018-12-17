@@ -118,5 +118,5 @@ class EightPuzzleProblem:
             h += math.fabs(x2 - x1) + math.fabs(y2 - y1)
         return h
 
-p = EightPuzzleProblem()
-print(p.getBestSuccessors())
+# p = EightPuzzleProblem()
+# print(p.getBestSuccessors())
