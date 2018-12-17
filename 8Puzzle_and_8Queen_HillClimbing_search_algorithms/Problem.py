@@ -12,7 +12,7 @@ class Directions(Enum):
 class EightPuzzleProblem:
 
     goal = []
-    board = [[1, 2, 3], [4, 5, 6], [7, 0, 8]]
+    board = [[1, 6, 5], [8, 0, 4], [2, 7, 3]]
     # 1 2 3
     # 4 5 6
     # 7 0 8
@@ -37,19 +37,24 @@ class EightPuzzleProblem:
             self.goal.append(temp)  
 
     # getting the best successor for a given problem
-    def getBestSuccessor(self):
-        bestSuccessor = []
+    def getBestSuccessors(self):
+        bestSuccessors = []
         blockDirections = self.getBlockDirections(self.getIndex(self.board, 0))
 
         for direction in Directions:
             successor = self.move(direction)
             if len(successor.board) > 0:
                 successorH = successor.manhatanHeuristic()
-                if len(bestSuccessor) == 0 or bestSuccessor[1] >= successorH:
-                    bestSuccessor = (successor, successorH, direction.name)
-        
-        return bestSuccessor[0], [bestSuccessor[2]]
-        
+                bestSuccessors.append((successor, successorH, direction.name))
+
+        bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
+        maxH = bestSuccessors[0][1]
+        for b in bestSuccessors:
+            if b[1] > maxH:
+                bestSuccessors.remove(b)
+
+        return bestSuccessors
+
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
         next = EightPuzzleProblem()
@@ -114,4 +119,4 @@ class EightPuzzleProblem:
         return h
 
 p = EightPuzzleProblem()
-p.getBestSuccessor()
+print(p.getBestSuccessors())
