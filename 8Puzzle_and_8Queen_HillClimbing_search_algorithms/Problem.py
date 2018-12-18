@@ -18,6 +18,7 @@ class EightPuzzleProblem:
         self.setGoal()
         self.setBoard(self.goal)
 
+    # board setter
     def setBoard(self, board):
         self.board = board
     
@@ -58,6 +59,7 @@ class EightPuzzleProblem:
         next = EightPuzzleProblem()
         next.setBoard(deepcopy(self.board))
         blockDirections = self.getBlockDirections((x, y))
+
         # checking the what directions are blocked
         if direction in blockDirections:
             next.setBoard([])
@@ -102,12 +104,14 @@ class EightPuzzleProblem:
         
         return (x2, y2)
 
+    # find a value's position in board
     def getIndex(self, board,value):
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
                 if board[i][j] == value:
                     return (i, j)
     
+    # manhatan heuristic: dx + dy
     def manhatanHeuristic(self):
         h = 0
         for k in range(1, 9):
@@ -116,9 +120,12 @@ class EightPuzzleProblem:
             h += math.fabs(x2 - x1) + math.fabs(y2 - y1)
         return h
 
+    # changes the problems board to a random solvable board
     def generateRandomBoard(self):
         problem = self
-        directionsList = [Directions.up, Directions.down, Directions.left, Directions.right]
+        directionsList = []
+        for d in Directions:
+            directionsList.append(d)
 
         for i in range(100):
             r = random.randrange(0, 4)
@@ -127,4 +134,5 @@ class EightPuzzleProblem:
                 r = random.randrange(0, 4)
                 temp = problem.move(directionsList[r])
             problem = temp
+
         self.setBoard(problem.board)
