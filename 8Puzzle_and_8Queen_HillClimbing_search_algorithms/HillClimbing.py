@@ -3,22 +3,27 @@ from Queue import Queue;
 
 
 def hillClimbing(problem):
-    current = (problem, [])
+    initialH = problem.manhatanHeuristic()
+    current = (problem, initialH,[])
     while(True):
-        currentH = current[0].manhatanHeuristic()
-        bestSuccessor = current[0].getBestSuccessors()
-        bestSuccessorH = bestSuccessor[0].manhatanHeuristic()
-
-        if bestSuccessorH < currentH:
-            answer = (bestSuccessor[0], current[1] + bestSuccessor[1])
+        bestSuccessor = current[0].getBestSuccessors()[0]
+        if bestSuccessor[1] >= current[1]:
+            answer = current
             break
-        current = (bestSuccessor[0], current[1] + bestSuccessor[1])
+        current = (bestSuccessor[0], bestSuccessor[1], [current[2] + bestSuccessor[2]])
 
         
+    if initialH:
+        accuracy = current[1] / initialH
+    else:
+        accuracy = "infinite"
     isGoal = answer[0].board == problem.goal
-    answer = answer + (isGoal, )
+
+    answer = answer + (isGoal, accuracy, problem)
     return answer
 
+
+#not usefull
 def hillClimbing2(problem):
     current = (problem, [])
     answers = []
@@ -48,15 +53,14 @@ def hillClimbing2(problem):
 
 
 
-# (<Problem.EightPuzzleProblem instance at 0x0000000002AE1A48>, 13.0, 'right', False)
 # answers = hillClimbing2(EightPuzzleProblem())
 # print("end")
 # print(answers)
-
-# solution, h, path, isGoal = hillClimbing2(EightPuzzleProblem())
-# print("--------------------------------------------------------------------------------")
-# print(solution.board)
-# print(h)
-# print(path)
-# print(isGoal)
-# print("--------------------------------------------------------------------------------")
+solution, h, path, isGoal, accuracy, initialState = hillClimbing(EightPuzzleProblem())
+print("--------------------------------------------------------------------------------")
+print(initialState.board, initialState.manhatanHeuristic())
+print(solution.board, solution.manhatanHeuristic())
+print(path)
+print(isGoal)
+print(accuracy)
+print("--------------------------------------------------------------------------------")
