@@ -3,6 +3,7 @@ from Queue import Queue;
 
 
 def hillClimbing(problem):
+    problem.generateRandomBoard()
     initialH = problem.manhatanHeuristic()
     current = (problem, initialH,[])
     while(True):
@@ -10,7 +11,7 @@ def hillClimbing(problem):
         if bestSuccessor[1] >= current[1]:
             answer = current
             break
-        current = (bestSuccessor[0], bestSuccessor[1], [current[2] + bestSuccessor[2]])
+        current = (bestSuccessor[0], bestSuccessor[1], current[2] + bestSuccessor[2])
 
         
     if initialH:
@@ -56,11 +57,20 @@ def hillClimbing2(problem):
 # answers = hillClimbing2(EightPuzzleProblem())
 # print("end")
 # print(answers)
-solution, h, path, isGoal, accuracy, initialState = hillClimbing(EightPuzzleProblem())
-print("--------------------------------------------------------------------------------")
-print(initialState.board, initialState.manhatanHeuristic())
-print(solution.board, solution.manhatanHeuristic())
-print(path)
-print(isGoal)
-print(accuracy)
-print("--------------------------------------------------------------------------------")
+k = 0
+for i in range (100):
+    solution, h, path, isGoal, accuracy, initialState = hillClimbing(EightPuzzleProblem())
+    # print("--------------------------------------------------------------------------------")
+    # print("startState", initialState.board, initialState.manhatanHeuristic())
+    # print("solution", solution.board, solution.manhatanHeuristic())
+    # print(path)
+    if(isGoal):
+        k += 1
+        print("startState", initialState.board, initialState.manhatanHeuristic())
+        print("solution", solution.board, solution.manhatanHeuristic())
+        print(path)
+
+    print(isGoal, accuracy)
+    # print(accuracy)
+    # print("--------------------------------------------------------------------------------")
+print k

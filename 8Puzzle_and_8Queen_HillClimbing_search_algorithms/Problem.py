@@ -12,14 +12,11 @@ class Directions(Enum):
 class EightPuzzleProblem:
 
     goal = []
-    board = [
-        [1, 2, 0],
-        [4, 5, 3],
-        [7, 8, 6]
-    ]
+    board = []
 
     def __init__(self):
         self.setGoal()
+        self.setBoard(self.goal)
 
     def setBoard(self, board):
         self.board = board
@@ -119,4 +116,15 @@ class EightPuzzleProblem:
             h += math.fabs(x2 - x1) + math.fabs(y2 - y1)
         return h
 
-    
+    def generateRandomBoard(self):
+        problem = self
+        directionsList = [Directions.up, Directions.down, Directions.left, Directions.right]
+
+        for i in range(100):
+            r = random.randrange(0, 4)
+            temp = problem.move(directionsList[r])
+            while len(temp.board) == 0:
+                r = random.randrange(0, 4)
+                temp = problem.move(directionsList[r])
+            problem = temp
+        self.setBoard(problem.board)
