@@ -4,11 +4,8 @@ from copy import deepcopy
 
 class EightQueenProblem:
     # queens = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
-    queens = []
+    queens = [(0, 1)]
     queens_num = 4
-    def __init__(self):
-        self.generateRandomQueens()
-        print(self.queens)
 
     def generateRandomQueens(self):
         for i in range(self.queens_num):
@@ -74,6 +71,18 @@ class EightQueenProblem:
                 h += j
         return math.pow(self.queens_num, 2) - h
         
+    def getBestSuccessors(self):
+        bestSuccessors = []
+        for queen in self.queens:
+            for i in range(self.queens_num):
+                for j in range(self.queens_num):
+                    successor, path = self.move(queen, (i, j))
+                    h = successor.attackedCellsHeuristic()
+                    if len(successor.queens) != 0 :
+                        bestSuccessors.append((successor.queens, h, path))
+                    bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
+            break
+        return bestSuccessors
 
 
     def move(self, queen, state):
