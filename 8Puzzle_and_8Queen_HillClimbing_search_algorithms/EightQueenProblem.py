@@ -1,5 +1,6 @@
 import random
 import math
+from copy import deepcopy
 
 class EightQueenProblem:
     # queens = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
@@ -80,11 +81,13 @@ class EightQueenProblem:
         next.queens = deepcopy(self.queens)
 
         if((i, j) not in next.queens):
+            path = [str(next.queens.index(queen)) + " -> " + str(state)]
             next.queens.insert(next.queens.index(queen), (i, j))
             next.queens.remove(queen)
         else:
             next.queens = []
-        return next
+            path = []
+        return next, path
 
 # 0 x 0 0
 # 0 0 x 0
