@@ -73,6 +73,19 @@ class EightQueenProblem:
                 h += j
         return h
 
+
+    def move(self, queen, state):
+        i, j = state
+        next = EightQueenProblem()
+        next.queens = deepcopy(self.queens)
+
+        if((i, j) not in next.queens):
+            next.queens.insert(next.queens.index(queen), (i, j))
+            next.queens.remove(queen)
+        else:
+            next.queens = []
+        return next
+
 # 0 x 0 0
 # 0 0 x 0
 # 0 0 0 1
