@@ -72,7 +72,8 @@ class EightQueenProblem:
         for i in board:
             for j in i:
                 h += j
-        return h
+        return math.pow(self.queens_num, 2) - h
+        
 
 
     def move(self, queen, state):
