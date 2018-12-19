@@ -1,6 +1,6 @@
-import random;
-from copy import deepcopy;
-from enum import Enum;
+import random
+from copy import deepcopy
+from enum import Enum
 import math
 
 class Directions(Enum):
@@ -17,7 +17,6 @@ class EightPuzzleProblem:
     def __init__(self):
         self.setGoal()
         self.setBoard(self.goal)
-
     # board setter
     def setBoard(self, board):
         self.board = board
@@ -121,18 +120,17 @@ class EightPuzzleProblem:
         return h
 
     # changes the problems board to a random solvable board
-    def generateRandomBoard(self):
+    def generateRandomBoard(self, hardrate):
         problem = self
         directionsList = []
         for d in Directions:
             directionsList.append(d)
-
-        for i in range(100):
+        
+        for i in range(hardrate):
             r = random.randrange(0, 4)
             temp = problem.move(directionsList[r])
             while len(temp.board) == 0:
                 r = random.randrange(0, 4)
                 temp = problem.move(directionsList[r])
             problem = temp
-
         self.setBoard(problem.board)
