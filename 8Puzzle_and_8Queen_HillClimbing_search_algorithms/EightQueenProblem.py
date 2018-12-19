@@ -37,7 +37,6 @@ class EightQueenProblem:
 
     def conflictHeuristic(self):
         board = [[0 for i in range(self.queens_num)] for j in range(self.queens_num)]
-        h = 0
         qs = deepcopy(self.queens)
 
         for (x, y) in self.queens:
@@ -83,6 +82,7 @@ class EightQueenProblem:
                 board[i][j] = 1
                 if (i, j) in qs and (i, j) != (x, y):
                     qs.remove((i, j)) 
+                    
         return self.queens_num - len(qs)
         
     def getBestSuccessors(self):
