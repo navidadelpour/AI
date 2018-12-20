@@ -1,6 +1,7 @@
 import random
 import math
 from copy import deepcopy
+from pprint import pprint
 
 class EightQueenProblem:
     # 0 1 0 0
@@ -86,8 +87,9 @@ class EightQueenProblem:
         return self.queens_num - len(qs)
         
     def getBestSuccessors(self):
-        bestSuccessors = []
+        bestSuccessorsForQueens = []
         for queen in self.queens:
+            bestSuccessors = []
             for i in range(self.queens_num):
                 for j in range(self.queens_num):
                     successor, path = self.move(queen, (i, j))
@@ -95,8 +97,13 @@ class EightQueenProblem:
                     if len(successor.queens) != 0 :
                         bestSuccessors.append((successor.queens, h, path))
                     bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
-            break
-        return bestSuccessors
+                    maxH = bestSuccessors[0][1]
+                    for b in bestSuccessors:
+                        if b[1] > maxH:
+                            bestSuccessors.remove(b)
+            bestSuccessorsForQueens.append(bestSuccessors)
+
+        return bestSuccessorsForQueens[0][0]
 
 
     def move(self, queen, state):
@@ -105,7 +112,7 @@ class EightQueenProblem:
         next.queens = deepcopy(self.queens)
 
         if((i, j) not in next.queens):
-            path = [str(next.queens.index(queen)) + " -> " + str(state)]
+            path = [str(next.queens.index(queen)) + " in " + str(queen) + " -> " + str(state)]
             next.queens.insert(next.queens.index(queen), (i, j))
             next.queens.remove(queen)
         else:
@@ -114,3 +121,5 @@ class EightQueenProblem:
         return next, path
 
 p = EightQueenProblem()
+p2 = p.getBestSuccessors()
+pprint(p2)
