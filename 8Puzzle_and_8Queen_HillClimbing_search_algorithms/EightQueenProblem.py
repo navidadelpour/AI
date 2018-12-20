@@ -1,6 +1,6 @@
 import random
 import math
-from copy import deepcopy
+from copy import deepcopy, copy
 from pprint import pprint
 
 class EightQueenProblem:
@@ -9,10 +9,19 @@ class EightQueenProblem:
     # 1 0 0 0
     # 0 0 1 0
     # queens = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
-    queens = [(0, 1), (1, 3), (2, 0), (3, 2)]
-    queens_num = 4
+    # queens = [(0, 1), (1, 3), (2, 0), (3, 2)]
+    # queens = [(1, 2), (0, 0), (3, 1), (3, 0)]
+    queens = []
+    queens_num = 8
 
-    def generateRandomQueens(self):
+    def getState(self):
+        return self.queens
+
+    def isGoal(self):
+        return self.heuristic() == 0
+
+    def generateRandomBoard(self, hardrate):
+        self.queens = []
         for i in range(self.queens_num):
             exists = True
             while exists:
@@ -36,7 +45,8 @@ class EightQueenProblem:
                     self.queens.append(state)
 
 
-    def conflictHeuristic(self):
+    # conflict heuristic
+    def heuristic(self):
         board = [[0 for i in range(self.queens_num)] for j in range(self.queens_num)]
         qs = deepcopy(self.queens)
 
@@ -83,28 +93,26 @@ class EightQueenProblem:
                 board[i][j] = 1
                 if (i, j) in qs and (i, j) != (x, y):
                     qs.remove((i, j)) 
-                    
         return self.queens_num - len(qs)
         
     def getBestSuccessors(self):
         bestSuccessorsForQueens = []
+
         for queen in self.queens:
             bestSuccessors = []
             for i in range(self.queens_num):
                 for j in range(self.queens_num):
                     successor, path = self.move(queen, (i, j))
-                    h = successor.conflictHeuristic()
+                    h = successor.heuristic()
                     if len(successor.queens) != 0 :
-                        bestSuccessors.append((successor.queens, h, path))
-                    bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
-                    maxH = bestSuccessors[0][1]
-                    for b in bestSuccessors:
-                        if b[1] > maxH:
-                            bestSuccessors.remove(b)
-            bestSuccessorsForQueens.append(bestSuccessors)
-
-        return bestSuccessorsForQueens[0][0]
-
+                        bestSuccessors.append((successor, h, path))
+            bestSuccessorsForQueens += bestSuccessors
+        bestSuccessorsForQueens = sorted(bestSuccessorsForQueens, key = lambda x: x[1])
+        maxH = bestSuccessorsForQueens[0][1]
+        for b in copy(bestSuccessorsForQueens):
+            if b[1] > maxH:
+                bestSuccessorsForQueens.remove(b)
+        return bestSuccessorsForQueens
 
     def move(self, queen, state):
         i, j = state
@@ -120,6 +128,6 @@ class EightQueenProblem:
             path = []
         return next, path
 
-p = EightQueenProblem()
-p2 = p.getBestSuccessors()
-pprint(p2)
+# problem = EightQueenProblem()
+# problem.generateRandomBoard(0)
+# problem.getBestSuccessors()

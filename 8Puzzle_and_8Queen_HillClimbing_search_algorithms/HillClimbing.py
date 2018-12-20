@@ -1,10 +1,12 @@
 from EightPuzzleProblem import EightPuzzleProblem
+from EightQueenProblem import EightQueenProblem
 import random
 import math
+from pprint import pprint
 
 def hillClimbing(problem, hardrate):
     problem.generateRandomBoard(hardrate)
-    initialH = problem.manhatanHeuristic()
+    initialH = problem.heuristic()
     current = (problem, initialH,[])
 
     while(True):
@@ -15,27 +17,34 @@ def hillClimbing(problem, hardrate):
             break
         current = (bestSuccessor[0], bestSuccessor[1], current[2] + bestSuccessor[2])
 
-    accuracy = current[1] / initialH if initialH else 1
-    isGoal = answer[0].board == problem.goal
+    accuracy = 1 - float(answer[1]) / float(initialH) if initialH and answer[1] else 1
+    isGoal = answer[0].isGoal()
 
     answer = answer + (isGoal, accuracy, problem)
     return answer
 
-
-def eightPuzzleProblemWithHillClimbing():
-    testNum = 100
+def solve(problem):
+    testNum = 10
     trueSum = 0
     midAccuracy = 0
-    hardrate = 10
-
+    hardrate = 20
     for i in range (testNum):
-        problem = EightPuzzleProblem()
         solution, h, path, isGoal, accuracy, initialState = hillClimbing(problem, hardrate)
         if(isGoal):
             trueSum += 1
         midAccuracy += accuracy
+        # print("------------------------------------------------")
+        # print(initialState.getState(), initialState.heuristic())
+        # print(solution.getState(), solution.heuristic())
+        # print(path)
+        # print(isGoal)
+        # print(accuracy)
 
+    print("------------------------------------------------")
+    print problem.__class__
     print 'win rate: ' + str(float(trueSum) / float(testNum))
-    print 'accuracy rate: ' + str(1 - (float(midAccuracy) / float(testNum)))
+    print 'accuracy rate: ' + str(float(midAccuracy) / float(testNum))
+    print("------------------------------------------------")
 
-eightPuzzleProblemWithHillClimbing()
+solve(EightPuzzleProblem())
+solve(EightQueenProblem())

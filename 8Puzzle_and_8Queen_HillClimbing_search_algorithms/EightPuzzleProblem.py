@@ -1,5 +1,5 @@
 import random
-from copy import deepcopy
+from copy import deepcopy, copy
 from enum import Enum
 import math
 
@@ -17,10 +17,17 @@ class EightPuzzleProblem:
     def __init__(self):
         self.setGoal()
         self.setBoard(self.goal)
+
     # board setter
     def setBoard(self, board):
         self.board = board
     
+    def isGoal(self):
+        return self.board == self.goal
+
+    def getState(self):
+        return self.board
+
     # setting the problem goal 
     def setGoal(self):
         self.goal = []
@@ -42,12 +49,12 @@ class EightPuzzleProblem:
         for direction in Directions:
             successor = self.move(direction)
             if len(successor.board) > 0:
-                successorH = successor.manhatanHeuristic()
+                successorH = successor.heuristic()
                 bestSuccessors.append((successor, successorH, [direction.name]))
 
         bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
         maxH = bestSuccessors[0][1]
-        for b in bestSuccessors:
+        for b in copy(bestSuccessors):
             if b[1] > maxH:
                 bestSuccessors.remove(b)
 
@@ -111,7 +118,7 @@ class EightPuzzleProblem:
                     return (i, j)
     
     # manhatan heuristic: dx + dy
-    def manhatanHeuristic(self):
+    def heuristic(self):
         h = 0
         for k in range(1, 9):
             x1, y1 = self.getIndex(self.board, k)
@@ -122,6 +129,7 @@ class EightPuzzleProblem:
     # changes the problems board to a random solvable board
     def generateRandomBoard(self, hardrate):
         problem = self
+        problem.board = self.goal
         directionsList = []
         for d in Directions:
             directionsList.append(d)
