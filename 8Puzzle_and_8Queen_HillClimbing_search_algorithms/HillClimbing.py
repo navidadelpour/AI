@@ -4,6 +4,7 @@ import random
 import math
 from pprint import pprint
 import time
+import sys
 
 def hillClimbing(problem, hardrate):
     t0 = time.time()
@@ -53,5 +54,11 @@ def solve(testNum, problem, trace):
     print 'overall time: ' + str(int((float(overallTime) / float(testNum)) * 1000)) + ' ms'
     print("------------------------------------------------")
 
-# solve(100, NPuzzleProblem(64), False)
-solve(10, NQueenProblem(8), True)
+args = sys.argv
+if(args[2] == "NPuzzleProblem"):
+    problem = NPuzzleProblem(int(args[3]))
+elif(args[2] == "NQueenProblem"):
+    problem = NQueenProblem(int(args[3]))
+
+
+solve(int(args[1]), problem, len(args) == 5 and args[4] == "--trace")
