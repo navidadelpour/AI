@@ -127,7 +127,3 @@ class EightQueenProblem:
             next.queens = []
             path = []
         return next, path
-
-# problem = EightQueenProblem()
-# problem.generateRandomBoard(0)
-# problem.getBestSuccessors()
