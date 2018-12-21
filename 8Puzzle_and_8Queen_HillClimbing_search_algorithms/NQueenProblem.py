@@ -56,15 +56,16 @@ class NQueenProblem:
                     qs.remove((x, i)) 
 
             # simpler version of the code below
-            for k in range(4):
-                i, j = x, y
-                di, dj, condition = self.getStep(i, j, k)
-                while condition:
-                    condition = (self.getStep(i, j, k))[2]
-                    i += di
-                    j += dj
-                    if (i, j) in qs and (i, j) != (x, y):
-                        qs.remove((i, j))
+            for di in [-1, 1]:
+                for dj in [-1, 1]:
+                    i, j = x, y
+                    condition = self.getCondition(di, dj, i, j)
+                    while condition:
+                        i += di
+                        j += dj
+                        if (i, j) in qs and (i, j) != (x, y):
+                            qs.remove((i, j))
+                        condition = self.getCondition(di, dj, i, j)
 
             # i, j = x, y
             # while i != 0 and j != 0:
@@ -101,15 +102,15 @@ class NQueenProblem:
         return self.queens_num - len(qs)
         
     # used in heuristic function
-    def getStep(self, i, j, k):
-        if k == 0:
-            return (-1, -1, i != 0 and j != 0)
-        elif k == 1:
-            return (-1, 1, i != 0 and j != self.queens_num - 1)
-        elif k == 2:
-            return (1, -1, i != self.queens_num - 1 and j != 0)
-        elif k == 3:
-            return(1, 1, i != self.queens_num - 1 and j != self.queens_num - 1)
+    def getCondition(self, di, dj, i, j):
+        if (di, dj) == (-1, -1):
+            return i != 0 and j != 0
+        elif (di, dj) == (-1, 1):
+            return i != 0 and j != self.queens_num - 1
+        elif (di, dj) == (1, -1):
+            return i != self.queens_num - 1 and j != 0
+        elif (di, dj) == (1, 1):
+            return i != self.queens_num - 1 and j != self.queens_num - 1
 
     def getBestSuccessors(self):
         bestSuccessorsForQueens = []
