@@ -9,12 +9,14 @@ class Directions(Enum):
     left = 3,
     right = 4
 
-class EightPuzzleProblem:
+class NPuzzleProblem:
 
+    puzzles_width = 3
     goal = []
     board = []
 
-    def __init__(self):
+    def __init__(self, n):
+        self.puzzles_width = int(math.log(n, 2))
         self.setGoal()
         self.setBoard(self.goal)
 
@@ -32,10 +34,10 @@ class EightPuzzleProblem:
     def setGoal(self):
         self.goal = []
         value = 1
-        for i in range(3):
+        for i in range(self.puzzles_width):
             temp = []
-            for j in range(3):
-                if(value == 9):
+            for j in range(self.puzzles_width):
+                if(value == math.pow(self.puzzles_width, 2)):
                     value = 0
                 temp.append(value)
                 value += 1
@@ -62,7 +64,7 @@ class EightPuzzleProblem:
 
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)
-        next = EightPuzzleProblem()
+        next = NPuzzleProblem(int(math.pow(2, self.puzzles_width)))
         next.setBoard(deepcopy(self.board))
         blockDirections = self.getBlockDirections((x, y))
 
@@ -87,11 +89,11 @@ class EightPuzzleProblem:
         blockDirections = []
         if x == 0:
             blockDirections.append(Directions.up)
-        elif x == 2:
+        elif x == self.puzzles_width - 1:
             blockDirections.append(Directions.down)
         if y == 0:
             blockDirections.append(Directions.left)
-        elif y == 2:
+        elif y == self.puzzles_width - 1:
             blockDirections.append(Directions.right)
 
         return blockDirections
@@ -120,7 +122,7 @@ class EightPuzzleProblem:
     # manhatan heuristic: dx + dy
     def heuristic(self):
         h = 0
-        for k in range(1, 9):
+        for k in range(1, int(math.pow(self.puzzles_width, 2))):
             x1, y1 = self.getIndex(self.board, k)
             x2, y2 = self.getIndex(self.goal, k)
             h += math.fabs(x2 - x1) + math.fabs(y2 - y1)

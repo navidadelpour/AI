@@ -3,16 +3,13 @@ import math
 from copy import deepcopy, copy
 from pprint import pprint
 
-class EightQueenProblem:
-    # 0 1 0 0
-    # 0 0 0 1
-    # 1 0 0 0
-    # 0 0 1 0
-    # queens = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
-    # queens = [(0, 1), (1, 3), (2, 0), (3, 2)]
-    # queens = [(1, 2), (0, 0), (3, 1), (3, 0)]
+class NQueenProblem:
+
     queens = []
     queens_num = 8
+
+    def __init__(self, n):
+        self.queens_num = n
 
     def getState(self):
         return self.queens
@@ -47,54 +44,73 @@ class EightQueenProblem:
 
     # conflict heuristic
     def heuristic(self):
-        board = [[0 for i in range(self.queens_num)] for j in range(self.queens_num)]
         qs = deepcopy(self.queens)
 
         for (x, y) in self.queens:
             for i in range(self.queens_num):
-                board[i][y] = 1
                 if (i, y) in qs and (i, y) != (x, y):
                     qs.remove((i, y)) 
 
             for i in range(self.queens_num):
-                board[x][i] = 1
                 if (x, i) in qs and (x, i) != (x, y):
                     qs.remove((x, i)) 
 
-            i, j = x, y
-            while i != 0 and j != 0:
-                i = i - 1
-                j = j - 1
-                board[i][j] = 1
-                if (i, j) in qs and (i, j) != (x, y):
-                    qs.remove((i, j)) 
+            # simpler version of the code below
+            for k in range(4):
+                i, j = x, y
+                di, dj, condition = self.getStep(i, j, k)
+                while condition:
+                    condition = (self.getStep(i, j, k))[2]
+                    i += di
+                    j += dj
+                    if (i, j) in qs and (i, j) != (x, y):
+                        qs.remove((i, j))
 
+            # i, j = x, y
+            # while i != 0 and j != 0:
+            #     i = i - 1
+            #     j = j - 1
+            #     board[i][j] = 1
+            #     if (i, j) in qs and (i, j) != (x, y):
+            #         qs.remove((i, j)) 
 
-            i, j = x, y
-            while i != self.queens_num - 1 and j != self.queens_num - 1:
-                i = i + 1
-                j = j + 1
-                board[i][j] = 1
-                if (i, j) in qs and (i, j) != (x, y):
-                    qs.remove((i, j)) 
+            # i, j = x, y
+            # while i != 0 and j != self.queens_num - 1:
+            #     i = i - 1
+            #     j = j + 1
+            #     board[i][j] = 1
+            #     if (i, j) in qs and (i, j) != (x, y): 
+            #         qs.remove((i, j)) 
 
-            i, j = x, y
-            while i != 0 and j != self.queens_num - 1:
-                i = i - 1
-                j = j + 1
-                board[i][j] = 1
-                if (i, j) in qs and (i, j) != (x, y): 
-                    qs.remove((i, j)) 
+            # i, j = x, y
+            # while i != self.queens_num - 1 and j != 0:
+            #     i = i + 1
+            #     j = j - 1
+            #     board[i][j] = 1
+            #     if (i, j) in qs and (i, j) != (x, y):
+            #         qs.remove((i, j)) 
 
-            i, j = x, y
-            while i != self.queens_num - 1 and j != 0:
-                i = i + 1
-                j = j - 1
-                board[i][j] = 1
-                if (i, j) in qs and (i, j) != (x, y):
-                    qs.remove((i, j)) 
+            # i, j = x, y
+            # while i != self.queens_num - 1 and j != self.queens_num - 1:
+            #     i = i + 1
+            #     j = j + 1
+            #     board[i][j] = 1
+            #     if (i, j) in qs and (i, j) != (x, y):
+            #         qs.remove((i, j)) 
+
         return self.queens_num - len(qs)
         
+    # used in heuristic function
+    def getStep(self, i, j, k):
+        if k == 0:
+            return (-1, -1, i != 0 and j != 0)
+        elif k == 1:
+            return (-1, 1, i != 0 and j != self.queens_num - 1)
+        elif k == 2:
+            return (1, -1, i != self.queens_num - 1 and j != 0)
+        elif k == 3:
+            return(1, 1, i != self.queens_num - 1 and j != self.queens_num - 1)
+
     def getBestSuccessors(self):
         bestSuccessorsForQueens = []
 
@@ -116,7 +132,7 @@ class EightQueenProblem:
 
     def move(self, queen, state):
         i, j = state
-        next = EightQueenProblem()
+        next = NQueenProblem(self.queens_num)
         next.queens = deepcopy(self.queens)
 
         if((i, j) not in next.queens):

@@ -1,14 +1,16 @@
-from EightPuzzleProblem import EightPuzzleProblem
-from EightQueenProblem import EightQueenProblem
+from NPuzzleProblem import NPuzzleProblem
+from NQueenProblem import NQueenProblem
 import random
 import math
 from pprint import pprint
+import time
 
 def hillClimbing(problem, hardrate):
+    t0 = time.time()
     problem.generateRandomBoard(hardrate)
     initialH = problem.heuristic()
     current = (problem, initialH,[])
-
+    
     while(True):
         bestSuccessors = current[0].getBestSuccessors()
         bestSuccessor = bestSuccessors[0]
@@ -17,34 +19,39 @@ def hillClimbing(problem, hardrate):
             break
         current = (bestSuccessor[0], bestSuccessor[1], current[2] + bestSuccessor[2])
 
+    time_elapsed = time.time() - t0
     accuracy = 1 - float(answer[1]) / float(initialH) if initialH and answer[1] else 1
     isGoal = answer[0].isGoal()
 
-    answer = answer + (isGoal, accuracy, problem)
+    answer = answer + (isGoal, accuracy, problem, time_elapsed)
     return answer
 
-def solve(problem):
-    testNum = 10
+def solve(testNum, problem, trace):
     trueSum = 0
-    midAccuracy = 0
+    overallAccuracy = 0
+    overallTime = 0
     hardrate = 20
     for i in range (testNum):
-        solution, h, path, isGoal, accuracy, initialState = hillClimbing(problem, hardrate)
+        solution, h, path, isGoal, accuracy, initialState, time_elapsed = hillClimbing(problem, hardrate)
         if(isGoal):
             trueSum += 1
-        midAccuracy += accuracy
-        # print("------------------------------------------------")
-        # print(initialState.getState(), initialState.heuristic())
-        # print(solution.getState(), solution.heuristic())
-        # print(path)
-        # print(isGoal)
-        # print(accuracy)
+        overallAccuracy += accuracy
+        overallTime += time_elapsed
+        if(trace):
+            print("------------------------------------------------")
+            print(initialState.getState(), initialState.heuristic())
+            print(solution.getState(), solution.heuristic())
+            print(path)
+            print(isGoal)
+            print('%.2f' % accuracy)
+            print(str(int(time_elapsed * 1000)) + ' ms')
 
     print("------------------------------------------------")
     print problem.__class__
-    print 'win rate: ' + str(float(trueSum) / float(testNum))
-    print 'accuracy rate: ' + str(float(midAccuracy) / float(testNum))
+    print 'overall win: ' + str(int(float(trueSum) / float(testNum) * 100)) + "%"
+    print 'overall accuracy: ' + str(int(float(overallAccuracy) / float(testNum) * 100)) + "%"
+    print 'overall time: ' + str(int((float(overallTime) / float(testNum)) * 1000)) + ' ms'
     print("------------------------------------------------")
 
-solve(EightPuzzleProblem())
-solve(EightQueenProblem())
+# solve(100, NPuzzleProblem(64), False)
+solve(10, NQueenProblem(8), True)
