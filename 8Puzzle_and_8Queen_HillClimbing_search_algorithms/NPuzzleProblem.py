@@ -44,23 +44,14 @@ class NPuzzleProblem:
             self.goal.append(temp)  
 
     # getting the best successor for a given problem
-    def getBestSuccessors(self):
-        bestSuccessors = []
-        blockDirections = self.getBlockDirections(self.getIndex(self.board, 0))
-
+    def getSuccessors(self):
+        successors = []
         for direction in Directions:
             successor = self.move(direction)
             if len(successor.board) > 0:
                 successorH = successor.heuristic()
-                bestSuccessors.append((successor, successorH, [direction.name]))
-
-        bestSuccessors = sorted(bestSuccessors, key = lambda x: x[1])
-        maxH = bestSuccessors[0][1]
-        for b in copy(bestSuccessors):
-            if b[1] > maxH:
-                bestSuccessors.remove(b)
-
-        return bestSuccessors
+                successors.append((successor, successorH, [direction.name]))
+        return sorted(successors, key = lambda x: x[1])
 
     def move(self, direction):
         x, y = self.getIndex(self.board, 0)

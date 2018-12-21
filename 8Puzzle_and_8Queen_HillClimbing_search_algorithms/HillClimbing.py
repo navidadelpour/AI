@@ -13,12 +13,12 @@ def hillClimbing(problem, hardrate):
     current = (problem, initialH,[])
     
     while(True):
-        bestSuccessors = current[0].getBestSuccessors()
-        bestSuccessor = bestSuccessors[0]
-        if bestSuccessor[1] >= current[1]:
+        successors = current[0].getSuccessors()
+        successor = successors[0]
+        if successor[1] >= current[1]:
             answer = current
             break
-        current = (bestSuccessor[0], bestSuccessor[1], current[2] + bestSuccessor[2])
+        current = (successor[0], successor[1], current[2] + successor[2])
 
     time_elapsed = time.time() - t0
     accuracy = 1 - float(answer[1]) / float(initialH) if initialH and answer[1] else 1

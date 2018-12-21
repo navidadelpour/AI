@@ -112,24 +112,19 @@ class NQueenProblem:
         elif (di, dj) == (1, 1):
             return i != self.queens_num - 1 and j != self.queens_num - 1
 
-    def getBestSuccessors(self):
-        bestSuccessorsForQueens = []
+    def getSuccessors(self):
+        successorsForEachQueens = []
 
         for queen in self.queens:
-            bestSuccessors = []
+            successors = []
             for i in range(self.queens_num):
                 for j in range(self.queens_num):
                     successor, path = self.move(queen, (i, j))
                     h = successor.heuristic()
                     if len(successor.queens) != 0 :
-                        bestSuccessors.append((successor, h, path))
-            bestSuccessorsForQueens += bestSuccessors
-        bestSuccessorsForQueens = sorted(bestSuccessorsForQueens, key = lambda x: x[1])
-        maxH = bestSuccessorsForQueens[0][1]
-        for b in copy(bestSuccessorsForQueens):
-            if b[1] > maxH:
-                bestSuccessorsForQueens.remove(b)
-        return bestSuccessorsForQueens
+                        successors.append((successor, h, path))
+            successorsForEachQueens += successors
+        return sorted(successorsForEachQueens, key = lambda x: x[1])
 
     def move(self, queen, state):
         i, j = state
