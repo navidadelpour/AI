@@ -11,9 +11,10 @@ it this project I implemented some search algorithms in different problems like 
   <li>how many test do you want of problem</li>
   <li>what problem do you want to solve</li>
   <li>define n parameters (number of queens or puzzles)</li>
+  <li>define algorithm by giving it's function name (hillClimbing or simulatedAnnealing)</li>
   <li>define tracing by giving --trace</li>
 </ol>
 
 <p>Example:</p>
 
-<code>python .\HillClimbing.py 10 NPuzzleProblem 8 --trace</code>
+<code>python HillClimbing.py 10 NPuzzleProblem 8 simulatedAnnealing --trace</code>
