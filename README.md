@@ -16,4 +16,4 @@ it this project I implemented some search algorithms in different problems like 
 
 <p>Example:</p>
 
-<code>python .\HillClimbing.py 10 NPuzzleProblem --trace</code>
+<code>python .\HillClimbing.py 10 NPuzzleProblem 8 --trace</code>
