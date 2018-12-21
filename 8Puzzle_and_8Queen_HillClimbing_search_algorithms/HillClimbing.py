@@ -10,7 +10,7 @@ def hillClimbing(problem, hardrate):
     t0 = time.time()
     problem.generateRandomBoard(hardrate)
     initialH = problem.heuristic()
-    current = (problem, initialH,[])
+    current = (problem, initialH, [])
     
     while(True):
         successors = current[0].getSuccessors()
@@ -26,6 +26,39 @@ def hillClimbing(problem, hardrate):
 
     answer = answer + (isGoal, accuracy, problem, time_elapsed)
     return answer
+
+def simulatedAnnealing(problem, hardrate):
+    temperature = 1000
+    coolingRate = .003
+
+    problem.generateRandomBoard(hardrate)
+    initialH = problem.heuristic()
+    current = (problem, initialH, [])
+    answer = None
+
+    print(current[0].getState())
+
+    while(temperature > 1):
+        successors = current[0].getSuccessors()
+        successor = successors[random.randrange(len(successors))]
+
+        if(probability(current[1], successor[1], temperature) > random.uniform(0, 1)):
+            current = (successor[0], successor[1], current[2] + successor[2])
+
+        if(current[0].isGoal()):
+            answer = current
+            break
+
+        temperature = temperature - temperature * coolingRate
+    
+    print(answer != None and answer[0].getState())
+
+def probability(e1, e2, t):
+    de = e2 - e1
+    if(de > 0):
+        return 1
+    else:
+        return math.exp(de / t)
 
 def solve(testNum, problem, trace):
     trueSum = 0
@@ -55,10 +88,15 @@ def solve(testNum, problem, trace):
     print("------------------------------------------------")
 
 args = sys.argv
-if(args[2] == "NPuzzleProblem"):
-    problem = NPuzzleProblem(int(args[3]))
-elif(args[2] == "NQueenProblem"):
-    problem = NQueenProblem(int(args[3]))
+if len(args) > 3:
+    if(args[2] == "NPuzzleProblem"):
+        problem = NPuzzleProblem(int(args[3]))
+    elif(args[2] == "NQueenProblem"):
+        problem = NQueenProblem(int(args[3]))
 
+    solve(int(args[1]), problem, len(args) == 5 and args[4] == "--trace")
 
-solve(int(args[1]), problem, len(args) == 5 and args[4] == "--trace")
+# solve(1, NPuzzleProblem(8), "--trace")
+# solve(1, NQueenProblem(4), "--trace")
+
+simulatedAnnealing(NPuzzleProblem(8), 10)
