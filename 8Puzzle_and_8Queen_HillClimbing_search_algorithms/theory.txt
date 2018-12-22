@@ -1,0 +1,15 @@
+1 ----------------------------------------------------------------------------------------
+
+2 ----------------------------------------------------------------------------------------
+
+8 puzzle problem:
+in each state we have only for successor to access (for for direction we can move)
+
+8 queen problem:
+in each state we have only ((8 ^ 2 - 8) * 8) different state for all queens to move
+
+3 ----------------------------------------------------------------------------------------
+
+if each player play the best they can, the problem become a simple backgammon (تخته نرد)
+game and in this kind of game we know that a player wins if they do their best.
+
