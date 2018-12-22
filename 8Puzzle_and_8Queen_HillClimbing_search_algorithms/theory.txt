@@ -3,7 +3,7 @@
 2 ----------------------------------------------------------------------------------------
 
 8 puzzle problem:
-in each state we have only for successor to access (for for direction we can move)
+in each state we have only maximum of four successor to access (for for direction we can move)
 
 8 queen problem:
 in each state we have only ((8 ^ 2 - 8) * 8) different state for all queens to move

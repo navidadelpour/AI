@@ -70,10 +70,7 @@ def simulatedAnnealing(problem, hardrate):
 
 def probability(e1, e2, t):
     de = e2 - e1
-    if(de > 0):
-        return 1
-    else:
-        return math.exp(de / t)
+    return 1 if de > 0 else math.exp(de / t)
 
 def solve(testNum, problem, algorithm, trace):
     trueSum = 0
@@ -96,26 +93,26 @@ def solve(testNum, problem, algorithm, trace):
         overallCost += cost
         if(trace):
             print("------------------------------------------------")
-            print("problem, h: " + str((initialState.getState(), initialState.heuristic())))
-            print("solution, h: " + str((solution.getState(), solution.heuristic())))
-            print("path: " + str(path))
-            print("win: " + str(isGoal))
-            print("cost: " + str(cost))
-            print("optimal cost: " + str(optimalCost))
-            print("accuracy: " + str('%.2f' % accuracy))
-            print("time elapsed: " + str(int(time_elapsed * 1000)) + ' ms')
+            print("problem, h: \t\t" + str((initialState.getState(), initialState.heuristic())))
+            print("solution, h: \t\t" + str((solution.getState(), solution.heuristic())))
+            print("path: \t\t\t" + str(path))
+            print("win: \t\t\t" + str(isGoal))
+            print("cost: \t\t\t" + str(cost))
+            print("optimal cost: \t\t" + str(optimalCost))
+            print("accuracy: \t\t" + str('%.2f' % accuracy))
+            print("time elapsed: \t\t" + str(int(time_elapsed * 1000)) + ' ms')
 
     print("------------------------------------------------")
-    print algorithm
-    print problem.__class__
-    print 'overall win: ' + str(int(float(trueSum) / float(testNum) * 100)) + "%"
-    print 'overall accuracy: ' + str(int(float(overallAccuracy) / float(testNum) * 100)) + "%"
-    print 'overall time: ' + str(int((float(overallTime) / float(testNum)) * 1000)) + ' ms'
-    print 'overall cost: ' + str((float(overallCost) / float(testNum)))
+    print "algorithm: \t\t" + str(algorithm)
+    print "problem: \t\t" + str(problem.__class__.__name__)
+    print 'overall win: \t\t' + str(int(float(trueSum) / float(testNum) * 100)) + "%"
+    print 'overall accuracy: \t' + str(int(float(overallAccuracy) / float(testNum) * 100)) + "%"
+    print 'overall time: \t\t' + str(int((float(overallTime) / float(testNum)) * 1000)) + ' ms'
+    print 'overall cost: \t\t' + str((float(overallCost) / float(testNum)))
     print("------------------------------------------------")
 
 args = sys.argv
-if len(args) > 5:
+if len(args) > 4:
     if(args[2] == "NPuzzleProblem"):
         problem = NPuzzleProblem(int(args[3]))
     elif(args[2] == "NQueenProblem"):
