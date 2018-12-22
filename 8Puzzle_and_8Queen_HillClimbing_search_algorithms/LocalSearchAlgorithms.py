@@ -82,7 +82,7 @@ def solve(testNum, problem, algorithm, trace):
     overallCost = 0
     hardrate = 20
     for i in range (testNum):
-        if algorithm == 'hillClimging':
+        if algorithm == 'hillClimbing':
             answer = hillClimbing(problem, hardrate)
         elif algorithm == 'simulatedAnnealing':
             answer = simulatedAnnealing(problem, hardrate)
@@ -115,15 +115,17 @@ def solve(testNum, problem, algorithm, trace):
     print("------------------------------------------------")
 
 args = sys.argv
-if len(args) > 4:
+if len(args) > 5:
     if(args[2] == "NPuzzleProblem"):
         problem = NPuzzleProblem(int(args[3]))
     elif(args[2] == "NQueenProblem"):
         problem = NQueenProblem(int(args[3]))
 
     solve(int(args[1]), problem, args[4], len(args) == 6 and args[5] == "--trace")
+else:
+    solve(12, NPuzzleProblem(8), "hillClimbing", "")
+    solve(12, NPuzzleProblem(8), "simulatedAnnealing", "")
 
-solve(2, NQueenProblem(4), "hillClimging", "--trace")
-solve(2, NPuzzleProblem(8), "hillClimging", "--trace")
-solve(2, NQueenProblem(4), "simulatedAnnealing", "--trace")
-solve(2, NPuzzleProblem(8), "simulatedAnnealing", "--trace")
+    solve(12, NQueenProblem(8), "hillClimbing", "")
+    solve(12, NQueenProblem(8), "simulatedAnnealing", "")
+

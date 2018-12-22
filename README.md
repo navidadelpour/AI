@@ -17,4 +17,8 @@ it this project I implemented some search algorithms in different problems like 
 
 <p>Example:</p>
 
-<code>python HillClimbing.py 10 NPuzzleProblem 8 simulatedAnnealing --trace</code>
+<code>python LocalSearchAlgorithms.py 10 NPuzzleProblem 8 simulatedAnnealing --trace</code>
+
+<p>defualt execution without parameters will do 12 test for each problem and algorithms without tracing</p>
+
+<code>python LocalSearchAlgorithms.py</code>
