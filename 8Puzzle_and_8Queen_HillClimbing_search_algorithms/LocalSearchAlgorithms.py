@@ -38,14 +38,16 @@ def simulatedAnnealing(problem, hardrate):
     cost = 0
     optimalCost = None
 
-    temperature = 10000
-    coolingRate = .003
+    calls = 0
+    maxCalls = 100
+    temperature = 10
+    coolingRate = .3
     problem.generateRandomBoard(hardrate)
     initialH = problem.heuristic()
     current = (problem, initialH, [])
     answer = None
 
-    while(temperature > 1):
+    while(calls < maxCalls):
         answer = current
         if(current[0].isGoal()):
             break
@@ -53,10 +55,11 @@ def simulatedAnnealing(problem, hardrate):
         successors = current[0].getSuccessors()
         successor = successors[random.randrange(len(successors))]
 
-        if(probability(current[1], successor[1], temperature) > random.uniform(0, 1)):
+        if(random.uniform(0, 1) < probability(successor[1], current[1], temperature)):
             current = (successor[0], successor[1], current[2] + successor[2])
 
         temperature = temperature - temperature * coolingRate
+        calls += 1
 
     # calculate statistics
     time_elapsed = time.time() - t0
@@ -120,9 +123,10 @@ if len(args) > 4:
 
     solve(int(args[1]), problem, args[4], len(args) == 6 and args[5] == "--trace")
 else:
-    solve(12, NPuzzleProblem(8), "hillClimbing", "")
-    solve(12, NPuzzleProblem(8), "simulatedAnnealing", "")
-
+    print(" * * * * * * * * * * * * NPuzzleProblem * * * * * * * * * * * * * *")
+    solve(12, NPuzzleProblem(64), "hillClimbing", "")
+    solve(12, NPuzzleProblem(64), "simulatedAnnealing", "")
+    print(" * * * * * * * * * * * * NQueenProblem * * * * * * * * * * * * * *")
     solve(12, NQueenProblem(8), "hillClimbing", "")
     solve(12, NQueenProblem(8), "simulatedAnnealing", "")
 

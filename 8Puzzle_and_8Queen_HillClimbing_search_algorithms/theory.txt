@@ -1,5 +1,36 @@
 1 ----------------------------------------------------------------------------------------
-
+------------------------------------------------
+algorithm:              hillClimbing
+problem:                NPuzzleProblem
+overall win:            83%
+overall accuracy:       88%
+overall time:           10 ms
+overall cost:           4.75
+------------------------------------------------
+------------------------------------------------
+algorithm:              simulatedAnnealing
+problem:                NPuzzleProblem
+overall win:            41%
+overall accuracy:       52%
+overall time:           70 ms
+overall cost:           9.83333333333
+------------------------------------------------
+------------------------------------------------
+algorithm:              hillClimbing
+problem:                NQueenProblem
+overall win:            25%
+overall accuracy:       76%
+overall time:           2621 ms
+overall cost:           4.0
+------------------------------------------------
+------------------------------------------------
+algorithm:              simulatedAnnealing
+problem:                NQueenProblem
+overall win:            0%
+overall accuracy:       48%
+overall time:           46113 ms
+overall cost:           29.25
+------------------------------------------------
 2 ----------------------------------------------------------------------------------------
 
 8 puzzle problem:
