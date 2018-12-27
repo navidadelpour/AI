@@ -27,11 +27,11 @@ def hillClimbing(problem, hardrate):
     problemStatistics.calculate(answer, initialH)
     return (answer + (problem,), problemStatistics)
 
-def simulatedAnnealing(problem, hardrate):
+def simulatedAnnealing(problem, hardrate, isComplete):
     problemStatistics = ProblemStatistics()
 
     calls = 0
-    maxCalls = 100
+    maxCalls = 1000
     temperature = 10
     coolingRate = .3
     
@@ -40,7 +40,7 @@ def simulatedAnnealing(problem, hardrate):
     current = (problem, initialH, [])
     answer = None
 
-    while(calls < maxCalls):
+    while(True if isComplete else calls < maxCalls):
         answer = current
         if(current[0].isGoal()):
             break
@@ -51,7 +51,7 @@ def simulatedAnnealing(problem, hardrate):
         if(random.uniform(0, 1) < probability(successor[1], current[1], temperature)):
             current = (successor[0], successor[1], current[2] + successor[2])
 
-        temperature = temperature - temperature * coolingRate
+        temperature = current[1] if isComplete else temperature - temperature * coolingRate
         calls += 1
 
     problemStatistics.calculate(answer, initialH)
@@ -65,6 +65,7 @@ def solve(args):
     testNum, problemName, problemFactor, algorithm, trace = args
     overallStatistics = OverallStatistics(problemName, algorithm, testNum)
     hardrate = 20
+    isComplete = False
 
     if problemName == "NPuzzleProblem":
         problem = NPuzzleProblem(int(problemFactor))
@@ -77,7 +78,7 @@ def solve(args):
         if algorithm == 'hillClimbing':
             answer = hillClimbing(problem, hardrate)
         elif algorithm == 'simulatedAnnealing':
-            answer = simulatedAnnealing(problem, hardrate)
+            answer = simulatedAnnealing(problem, hardrate, isComplete)
         else:
             return
 
