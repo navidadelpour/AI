@@ -78,12 +78,14 @@ class NQueenProblem:
 
         for queen in self.queens:
             successors = []
-            for i in range(self.queens_num):
-                for j in range(self.queens_num):
-                    successor, path = self.move(queen, (i, j))
-                    h = successor.heuristic()
-                    if len(successor.queens) != 0 :
-                        successors.append((successor, h, path))
+            for i in range(queen[0] - 1, queen[0] + 2):
+                if i != self.queens_num and i != -1:
+                    for j in range(queen[1] - 1, queen[1] + 2):
+                        if j != self.queens_num and j != -1:
+                            successor, path = self.move(queen, (i, j))
+                            h = successor.heuristic()
+                            if len(successor.queens) != 0 :
+                                successors.append((successor, h, path))
             successorsForEachQueens += successors
         return sorted(successorsForEachQueens, key = lambda x: x[1])
 
