@@ -44,73 +44,34 @@ class NQueenProblem:
 
     # conflict heuristic
     def heuristic(self):
-        qs = deepcopy(self.queens)
-
+        conflicts = 0
         for (x, y) in self.queens:
-            for i in range(self.queens_num):
-                if (i, y) in qs and (i, y) != (x, y):
-                    qs.remove((i, y)) 
-
-            for i in range(self.queens_num):
-                if (x, i) in qs and (x, i) != (x, y):
-                    qs.remove((x, i)) 
-
-            # simpler version of the code below
-            for di in [-1, 1]:
-                for dj in [-1, 1]:
-                    i, j = x, y
-                    condition = self.getCondition(di, dj, i, j)
-                    while condition:
-                        i += di
-                        j += dj
-                        if (i, j) in qs and (i, j) != (x, y):
-                            qs.remove((i, j))
+            hasConflict = False
+            for di in range(-1, 2):
+                for dj in range(-1, 2):
+                    if (di != 0 or dj != 0) and not hasConflict:
+                        i, j = x, y
                         condition = self.getCondition(di, dj, i, j)
-
-            # i, j = x, y
-            # while i != 0 and j != 0:
-            #     i = i - 1
-            #     j = j - 1
-            #     board[i][j] = 1
-            #     if (i, j) in qs and (i, j) != (x, y):
-            #         qs.remove((i, j)) 
-
-            # i, j = x, y
-            # while i != 0 and j != self.queens_num - 1:
-            #     i = i - 1
-            #     j = j + 1
-            #     board[i][j] = 1
-            #     if (i, j) in qs and (i, j) != (x, y): 
-            #         qs.remove((i, j)) 
-
-            # i, j = x, y
-            # while i != self.queens_num - 1 and j != 0:
-            #     i = i + 1
-            #     j = j - 1
-            #     board[i][j] = 1
-            #     if (i, j) in qs and (i, j) != (x, y):
-            #         qs.remove((i, j)) 
-
-            # i, j = x, y
-            # while i != self.queens_num - 1 and j != self.queens_num - 1:
-            #     i = i + 1
-            #     j = j + 1
-            #     board[i][j] = 1
-            #     if (i, j) in qs and (i, j) != (x, y):
-            #         qs.remove((i, j)) 
-
-        return self.queens_num - len(qs)
+                        while condition:
+                            i += di
+                            j += dj
+                            if (i, j) in self.queens and (i, j) != (x, y):
+                                conflicts += 1
+                                hasConflict = True
+                                break
+                            condition = self.getCondition(di, dj, i, j)
+        return conflicts
         
     # used in heuristic function
     def getCondition(self, di, dj, i, j):
-        if (di, dj) == (-1, -1):
-            return i != 0 and j != 0
-        elif (di, dj) == (-1, 1):
-            return i != 0 and j != self.queens_num - 1
-        elif (di, dj) == (1, -1):
-            return i != self.queens_num - 1 and j != 0
-        elif (di, dj) == (1, 1):
-            return i != self.queens_num - 1 and j != self.queens_num - 1
+        if (di, dj) == (-1, -1): return i != 0 and j != 0
+        elif (di, dj) == (-1, 0): return i != 0
+        elif (di, dj) == (-1, 1): return i != 0 and j != self.queens_num - 1
+        elif (di, dj) == (0, -1): return j != 0
+        elif (di, dj) == (0, 1): return j != self.queens_num - 1
+        elif (di, dj) == (1, -1): return i != self.queens_num - 1 and j != 0
+        elif (di, dj) == (1, 0): return i != self.queens_num - 1
+        elif (di, dj) == (1, 1): return i != self.queens_num - 1 and j != self.queens_num - 1
 
     def getSuccessors(self):
         successorsForEachQueens = []
