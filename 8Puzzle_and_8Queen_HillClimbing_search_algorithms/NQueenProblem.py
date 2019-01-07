@@ -102,3 +102,22 @@ class NQueenProblem:
             next.queens = []
             path = []
         return next, path
+
+    def printBoard(self):
+        for i in range(self.queens_num):
+            s = ""
+            for j in range(self.queens_num):
+                if (i, j) in self.queens:
+                    s += "1 "
+                else:
+                    s += "0 "
+            print(s)
+        print("")
+
+    def _printBoard(self, board):
+        for i in range(len(board)):
+            s = ""
+            for j in range(len(board)):
+                s += str(board[i][j]) + " "                    
+            print(s)
+        print("")
